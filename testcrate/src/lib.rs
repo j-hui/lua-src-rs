@@ -1,5 +1,8 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 
+#[cfg(feature = "std")]
+extern crate core;
+
 use core::ffi::{c_char, c_int, c_long, c_void};
 
 extern "C" {
