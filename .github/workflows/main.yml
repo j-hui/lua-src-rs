@@ -80,7 +80,7 @@ jobs:
         target: ${{ matrix.target }}
         components: rust-src
     - name: Install Arm GCC (${{ matrix.target }})
-      if: startsWith(inputs.target, 'thumbv')
+      if: startsWith(matrix.target, 'thumbv')
       uses: ryanwinter/arm-none-eabi-gcc@master
     - name: Build ${{ matrix.lua }}
       run: |
