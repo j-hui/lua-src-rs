@@ -1,4 +1,6 @@
-use std::os::raw::{c_char, c_int, c_long, c_void};
+#![cfg_attr(not(feature = "std"), no_std)]
+
+use core::ffi::{c_char, c_int, c_long, c_void};
 
 extern "C" {
     pub fn luaL_newstate() -> *mut c_void;
@@ -23,6 +25,7 @@ fn lua_works() {
         let state = luaL_newstate();
         assert!(state != ptr::null_mut());
 
+        #[cfg(std)]
         luaL_openlibs(state);
 
         let version = {
