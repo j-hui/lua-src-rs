@@ -28,7 +28,6 @@ fn lua_works() {
         let state = luaL_newstate();
         assert!(state != ptr::null_mut());
 
-        #[cfg(std)]
         luaL_openlibs(state);
 
         let version = {
