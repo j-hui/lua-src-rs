@@ -82,6 +82,8 @@ jobs:
     - name: Install Arm GCC (${{ matrix.target }})
       if: startsWith(matrix.target, 'thumbv')
       uses: ryanwinter/arm-none-eabi-gcc@master
+      with:
+        release: '10.3-2021.10'
     - name: Build ${{ matrix.lua }}
       run: |
         cargo build --manifest-path testcrate/Cargo.toml --target ${{ matrix.target }} --release --features ${{ matrix.lua }}
