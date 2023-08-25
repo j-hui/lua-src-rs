@@ -104,7 +104,7 @@ impl Build {
                 // Defined in Lua >= 5.3
                 config.define("LUA_USE_WINDOWS", None);
             }
-            _ => panic!("don't know how to build Lua for {}", target),
+            _ => (),
         };
 
         if let Lua54 = version {
