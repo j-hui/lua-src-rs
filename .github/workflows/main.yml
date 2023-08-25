@@ -70,8 +70,8 @@ jobs:
         - thumbv8m.main-none-eabihf
         # - xtensa-esp32-none-elf
         # - xtensa-esp32s2-none-elf
-        # - riscv32imc-unknown-none-elf
-        # - riscv32imac-unknown-none-elf
+        - riscv32imc-unknown-none-elf
+        - riscv32imac-unknown-none-elf
         lua: [lua54, lua53, lua52, lua51]
     steps:
     - uses: actions/checkout@v3
@@ -84,6 +84,9 @@ jobs:
       uses: ryanwinter/arm-none-eabi-gcc@master
       with:
         release: '10.3-2021.10'
+    - name: Install RISC-V GCC (${{ matrix.target }})
+      if: startsWith(matrix.target, 'riscv')
+      uses: gregdavill/setup-riscv-gnu-toolchain@v2
     - name: Build ${{ matrix.lua }}
       run: |
         cargo build --manifest-path testcrate/Cargo.toml --target ${{ matrix.target }} --release --features ${{ matrix.lua }} --no-default-features
