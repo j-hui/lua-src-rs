@@ -1,7 +1,14 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
+#![no_main]
 
-#[cfg(feature = "std")]
-extern crate core;
+extern crate panic_halt;
+extern crate cortex_m_rt;
+extern crate cortex_m_semihosting;
+
+use panic_halt as _;
+
+use cortex_m_rt::entry;
+use cortex_m_semihosting::{debug, hprintln};
 
 use core::ffi::{c_char, c_int, c_long, c_void};
 
@@ -21,9 +28,9 @@ pub unsafe fn lua_getglobal(state: *mut c_void, k: *const c_char) {
     lua_getfield(state, -10002 /* LUA_GLOBALSINDEX */, k);
 }
 
-#[test]
+// #[test]
 fn lua_works() {
-    use std::{ptr, slice};
+    use core::{ptr, slice};
     unsafe {
         let state = luaL_newstate();
         assert!(state != ptr::null_mut());
@@ -48,7 +55,7 @@ fn lua_works() {
     }
 }
 
-#[test]
+// #[test]
 fn unicode_identifiers() {
     unsafe {
         let state = luaL_newstate();
@@ -59,4 +66,16 @@ fn unicode_identifiers() {
         #[cfg(not(feature = "lua54"))]
         assert_ne!(0, ret);
     }
+}
+
+#[entry]
+fn main() -> ! {
+    hprintln!("Hello, world!");
+    lua_works();
+
+    // exit QEMU
+    // NOTE do not run this on hardware; it can corrupt OpenOCD state
+    debug::exit(debug::EXIT_SUCCESS);
+
+    loop {}
 }

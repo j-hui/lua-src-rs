@@ -8,6 +8,8 @@ lua54 = []
 lua53 = []
 lua52 = []
 lua51 = []
+std = []
+default = ["std"]
 
 [build-dependencies.lua-src]
 path = ".."
