@@ -81,6 +81,8 @@ impl Build {
             .opt_level(2)
             .cargo_metadata(false);
 
+        let mut has_std = true;
+
         match target {
             _ if target.contains("linux") => {
                 config.define("LUA_USE_LINUX", None);
@@ -104,7 +106,9 @@ impl Build {
                 // Defined in Lua >= 5.3
                 config.define("LUA_USE_WINDOWS", None);
             }
-            _ => (),
+            _ => {
+                has_std = false;
+            }
         };
 
         if let Lua54 = version {
@@ -141,15 +145,15 @@ impl Build {
             .file(source_dir.join("ldump.c"))
             .file(source_dir.join("lfunc.c"))
             .file(source_dir.join("lgc.c"))
-            .file(source_dir.join("linit.c"))
-            .file(source_dir.join("liolib.c"))
+            // skipped: linit.c (std-only)
+            // skipped: liolib.c (std-only)
             .file(source_dir.join("llex.c"))
             .file(source_dir.join("lmathlib.c"))
             .file(source_dir.join("lmem.c"))
-            .file(source_dir.join("loadlib.c"))
+            // skipped: loadlib.c (std-only)
             .file(source_dir.join("lobject.c"))
             .file(source_dir.join("lopcodes.c"))
-            .file(source_dir.join("loslib.c"))
+            // skipped: loslib.c (std-only)
             .file(source_dir.join("lparser.c"))
             .file(source_dir.join("lstate.c"))
             .file(source_dir.join("lstring.c"))
@@ -161,6 +165,14 @@ impl Build {
             // skipped: lutf8lib.c (>= 5.3)
             .file(source_dir.join("lvm.c"))
             .file(source_dir.join("lzio.c"));
+
+        if has_std {
+            config
+                .file(source_dir.join("linit.c"))
+                .file(source_dir.join("liolib.c"))
+                .file(source_dir.join("loadlib.c"))
+                .file(source_dir.join("loslib.c"));
+        }
 
         match version {
             Lua51 => {}
