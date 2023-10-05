@@ -172,6 +172,10 @@ impl Build {
                 .file(source_dir.join("liolib.c"))
                 .file(source_dir.join("loadlib.c"))
                 .file(source_dir.join("loslib.c"));
+        } else {
+            config
+                .include(source_dir_base.join("nolibc").join("include"))
+                .flag("-nostdlib");
         }
 
         match version {
